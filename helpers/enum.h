@@ -1,0 +1,23 @@
+enum TOKENS
+{
+    INTTOKEN,
+    FLOATTOKEN,
+    BOOLTOKEN,
+    LONGTOKEN,
+    CHARTOKEN,
+    IF,
+    ELSE,
+    WHILE,
+    DO,
+    FOR,
+    LPAREN,
+    RPAREN,
+    EQUAL,
+    LESSTHAN,
+    GREATERTHAN,
+    PLUS,
+    MINUS,
+    DIVIDE,
+    IDENTIFIER,
+    NUMBER
+};
