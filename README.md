@@ -1,6 +1,6 @@
 # Plex (Parallel Lexical Analyzer)
 
-Plex is a parallel lexical analyzer designed to efficiently process large amounts of text data. It is particularly useful for analyzing data in parallel across multiple processors or cores.
+Plex is a parallel lexical analyzer designed to efficiently process large amounts of text data. It is particularly useful for lexical analyzing source code in parallel.
 ## How to Run?
 
 To run Plex, follow these simple steps:
