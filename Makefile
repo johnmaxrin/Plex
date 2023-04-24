@@ -2,7 +2,7 @@ CC = nvcc
 
 SRCS = plex.cu helpers/helper.cu helpers/checks.cu fileops/plexFile.cu 
 
-OBJS = $(SRCS:.c=.o)
+OBJS = $(SRCS:.cu =.o)
 
 TARGET = Plex
 
@@ -15,4 +15,4 @@ $(TARGET): $(OBJS)
 	$(CC) -rdc=true -c $< -o $@
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(TARGET)
