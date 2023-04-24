@@ -1,5 +1,6 @@
 #include "helper.h"
 #include "enum.h"
+#include "global.h"
 #include "checks.h"
 #include <stdio.h>
 
@@ -7,10 +8,10 @@ __device__ char* parse(char *str, int *tokens, char *values, int idx)
 {
 
     int pointer = 0, bufferPointer = 0;
-    char buffer[20];
+    char buffer[MTS];
     int token = -1;
-    int count = idx*3;
-    char data[20];
+    int count = idx*TPW;
+    char data[MTS];
 
     while (str[pointer] != '\0')
     {
@@ -32,7 +33,7 @@ __device__ char* parse(char *str, int *tokens, char *values, int idx)
                     plex_strcpy(data, buffer,idx);
                 }
                 
-                memset(buffer,'\0' ,sizeof(char) * 20);
+                memset(buffer,'\0' ,sizeof(char) * MTS);
                 bufferPointer = 0;
             }
         }
@@ -98,3 +99,4 @@ __device__ void plex_strcpysymbol(char *string, char value, int idx)
     string[strlen++] = '.';
     string[strlen] = '\0';
 }
+

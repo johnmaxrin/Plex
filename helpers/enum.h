@@ -13,6 +13,7 @@ enum TOKENS
     LPAREN,
     RPAREN,
     EQUAL,
+    SEMICOLON,
     LESSTHAN,
     GREATERTHAN,
     PLUS,

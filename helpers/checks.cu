@@ -4,7 +4,7 @@
 
 __device__ bool isalnum(char s)
 {
-    if (s >= 'a' && s <= 'z' || s >= 'A' && s <= 'Z')
+    if (s >= 'a' && s <= 'z' || s >= 'A' && s <= 'Z' || s >= '0' && s <= '9')
     {
         return true;
     }
@@ -32,6 +32,8 @@ __device__ int issymbol(char c)
         return MINUS;
     case '/':
         return DIVIDE;
+    case ';':
+        return SEMICOLON;
 
     default:
         return -1;
@@ -41,7 +43,9 @@ __device__ int issymbol(char c)
 
 
 __device__ int iskeyword(char *string)
-{
+{   
+
+    // Possible future upgrade.
     const char *keywords[10] = {"int", "float", "bool", "long", "char", "if", "else", "while", "do", "for"};
 
     for (int i = 0; i < 10; ++i)

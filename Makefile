@@ -1,6 +1,6 @@
 CC = nvcc
 
-SRCS = plex.cu helpers/helper.cu helpers/checks.cu fileops/plexFile.cu 
+SRCS = plex.cu helpers/helper.cu helpers/checks.cu fileops/plexFile.cu helpers/hostHelp.cu 
 
 OBJS = $(SRCS:.cu =.o)
 
