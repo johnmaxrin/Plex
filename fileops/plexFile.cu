@@ -18,3 +18,20 @@ thrust::host_vector<std::string> readFile(const char * fileName)
     
     return h_vec;
 }
+
+void printOutput(thrust::host_vector<std::string> tokenData,thrust::host_vector<int> tokensList,double timespent)
+{
+    FILE *file = fopen("output.txt", "w");
+
+    if(file == NULL)
+    {
+        printf("Error while creating output file!\n");
+        return;
+    }
+    
+    for(int i = 0; i<tokensList.size(); ++i)
+        fprintf(file,"< %s , %d >\n",tokenData[i].c_str(),tokensList[i]);
+
+    fprintf(file,"Execution time: %f\n",timespent);
+
+}

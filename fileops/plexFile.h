@@ -9,6 +9,7 @@
 
 
 thrust::host_vector<std::string> readFile(const char *);
+void printOutput(thrust::host_vector<std::string>,thrust::host_vector<int>, double);
 
 
 

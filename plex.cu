@@ -8,13 +8,17 @@
 #include "fileops/plexFile.h"
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
+#include<time.h>
+ 
 
 
-
-__global__ void init(char *d_str, int *tokens, char *values)
+__global__ void init(char *d_str, int *tokens, char *values, int size)
 {
 
   int idx = threadIdx.x + blockDim.x * blockIdx.x;
+  if(idx >= size)
+    return;
+
   char *data = &d_str[idx*MTS];
   char *parseData;
   parseData = parse(data, tokens, values,idx);
@@ -36,14 +40,14 @@ int main(int argc, char *argv[])
   // Reading file  
   thrust::host_vector<std::string> h_vec = readFile(argv[1]);
 
-  cudaMalloc(&d_str, h_vec.size() * sizeof(char) * MTS);
+  cudaError_t error =  cudaMalloc(&d_str, h_vec.size() * sizeof(char) * MTS);
   for (int i = 0; i < h_vec.size(); ++i)
   {
     std::string str = h_vec[i];
     const char *c_str = str.c_str();
     cudaMemcpy(&d_str[i*MTS], c_str, str.size()+1, cudaMemcpyHostToDevice);
   }
-
+ 
   
 
   cudaMalloc(&tokens, sizeof(int) * TPW * h_vec.size());
@@ -53,21 +57,27 @@ int main(int argc, char *argv[])
   htokens = (int *)malloc(sizeof(int) * TPW * h_vec.size());
   hvalues = (char *)malloc(sizeof(char) * MTS * h_vec.size());
 
-  // Start of GPU Processing 
-  init<<<1, h_vec.size()>>>(d_str, tokens, values);
+  
+  int gridX = ((h_vec.size()+BLOCKSIZE-1)/BLOCKSIZE);
+  dim3 block(BLOCKSIZE,1,1);
+  dim3 grid(gridX,1,1);
+
+
+  // Start of GPU Processing
+  clock_t begin = clock(); 
+  init<<<grid,block>>>(d_str, tokens, values, h_vec.size());
   cudaMemcpy(htokens, tokens, sizeof(int) * TPW * h_vec.size(), cudaMemcpyDeviceToHost);
   cudaMemcpy(hvalues, values, sizeof(char) * MTS * h_vec.size(), cudaMemcpyDeviceToHost);
   cudaDeviceSynchronize();
-  // End of GPU Processing 
-
+  clock_t end = clock();
+  // End of GPU Processing  
   generateValues(hvalues,h_vec.size());
   thrust::host_vector<std::string> tokenData = generateValues(hvalues,h_vec.size());
   thrust::host_vector<int> tokensList = generateTokens(htokens,h_vec.size()*TPW);
 
+  double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+  printOutput(tokenData,tokensList,time_spent);
 
-  for(int i = 0; i<tokensList.size(); ++i)
-    printf("< %s , %d >\n",tokenData[i].c_str(),tokensList[i]);
-  
 
   return 0;
 }

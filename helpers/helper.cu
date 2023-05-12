@@ -11,7 +11,7 @@ __device__ char* parse(char *str, int *tokens, char *values, int idx)
     char buffer[MTS];
     int token = -1;
     int count = idx*TPW;
-    char data[MTS];
+    char *data = new char[MTS];
 
     while (str[pointer] != '\0')
     {
